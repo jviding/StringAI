@@ -38,5 +38,5 @@ def plot_output_curves(hidden_size):
 
     fig.suptitle("Output Layer Response Curves: Before vs. After Training", fontsize=14)
     plt.tight_layout()
-    #plt.savefig("assets/output_boundary.png", dpi=300, bbox_inches="tight")
+    plt.savefig("assets/output2_boundary.png", dpi=300, bbox_inches="tight")
     plt.show()
