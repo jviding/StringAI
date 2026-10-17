@@ -12,7 +12,7 @@ def get_y(phase, index, x_range):
     b2 = b2_snapshots[phase][0]
     return [max(0.0, (((W1 * x) + b1) * W2) + b2) for x in x_range]
 
-def plot_prediction_curves(hidden_size):
+def plot_output_curves(hidden_size):
     # Generate a range of inputs from 0.0 to 1.0
     x_range = [i / 100.0 for i in range(101)]
 
@@ -38,5 +38,5 @@ def plot_prediction_curves(hidden_size):
 
     fig.suptitle("Output Layer Response Curves: Before vs. After Training", fontsize=14)
     plt.tight_layout()
-    plt.savefig("assets/prediction_boundary.png", dpi=300, bbox_inches="tight")
+    #plt.savefig("assets/output_boundary.png", dpi=300, bbox_inches="tight")
     plt.show()
