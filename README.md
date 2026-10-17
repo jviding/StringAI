@@ -81,7 +81,7 @@ When plotting the individual hidden neurons scaled by their respective output we
 distinct geometric pattern emerges: many of the surviving curves appear as falling curves, with 
 some possibly exhibiting exceptionally sharp slopes.
 
-![Neural Network Prediction Boundary](assets/output_boundary.png)
+![Neural Network Output Boundary](assets/output_boundary.png)
 
 ### Why Falling Curves?
 Output Weight Inversion ($W_2$ Multiplication): While the underlying hidden neurons naturally 
@@ -102,3 +102,31 @@ sharp falling slopes to slam the prediction back down once the target character 
 Cancellation: By balancing positive and negative scaled outputs across the hidden layer, the 
 network constructs a localized "bump" or window function capable of isolating the target 
 character amidst a sea of non-target inputs.
+
+## Observations: Final Prediction
+When evaluating the network's final output probability curve across the input domain, a striking 
+asymmetry appears: the network successfully learns a sharp "right wall" but completely misses 
+the "left wall."
+
+![Neural Network Prediction Boundary](assets/prediction_boundary.png)
+
+### Why Does the Plateau Exist?
+Unbounded Left Boundary: Because surviving hidden neurons initialize with positive biases, their 
+outputs remain active even at the lowest input values ($x = 0.0$). Without a counterbalancing 
+rising ramp to cut off inputs coming from the left, the net activation stays high for all values 
+preceding the target.
+
+Sigmoid Plateau: The combined pre-activation sum maps through the final sigmoid layer into a high 
+constant probability (around $0.83$) that stretches flatly from $0.0$ up to roughly $0.16$ before 
+the downward slope initiates.
+
+### Key Insights
+False Positives for Preceding Characters: The flat plateau means any character whose numerical 
+value falls below the drop-off point-effectively treating characters like a through d as the 
+target 'e'-is incorrectly predicted as a positive match. The network successfully learned where 
+the target ends, but treats everything before it as valid.
+
+Half-Space vs. Interval Classifiers: Gradient descent settled for a half-space boundary (blocking 
+the right side) because it minimized overall loss faster than constructing a fully enclosed 
+interval. True character isolation requires coordinated opposition between rising and falling 
+ramps to pinch the target from both sides.
