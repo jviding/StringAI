@@ -81,7 +81,7 @@ When plotting the individual hidden neurons scaled by their respective output we
 distinct geometric pattern emerges: many of the surviving curves appear as falling curves, with 
 some possibly exhibiting exceptionally sharp slopes.
 
-![Neural Network Prediction Boundary](assets/prediction_boundary.png)
+![Neural Network Prediction Boundary](assets/output_boundary.png)
 
 ### Why Falling Curves?
 Output Weight Inversion ($W_2$ Multiplication): While the underlying hidden neurons naturally 
