@@ -45,7 +45,7 @@ String: 'e' | Target: 1.0 | Prediction: 0.9440
 String: 'l' | Target: 0.0 | Prediction: 0.0000
 ```
 
-## Observations: Training
+## Observations: Neurons
 During training, approximately half of the hidden neurons in the layer flatline and become 
 permanently inactive - a classic manifestation of the **Dying ReLU problem**.
 
@@ -75,3 +75,30 @@ This behavior highlights a core trade-off when building network architectures fr
 capacity offers flexibility, but standard ReLU activations leave excess capacity vulnerable to 
 permanent gradient starvation.
 
+
+## Observations: Outputs
+When plotting the individual hidden neurons scaled by their respective output weights ($W_2$), a 
+distinct geometric pattern emerges: many of the surviving curves appear as falling curves, with 
+some possibly exhibiting exceptionally sharp slopes.
+
+![Neural Network Prediction Boundary](assets/prediction_boundary.png)
+
+### Why Falling Curves?
+Output Weight Inversion ($W_2$ Multiplication): While the underlying hidden neurons naturally 
+learn rising ramps ($W_1 > 0$), their actual contribution to the final network depends on $W_2$. 
+If $W_2$ is negative, it multiplies and inverts the positive ramp, transforming a rising slope 
+into a falling curve.
+
+Sharp Transitions: Certain neurons display very steep, aggressive slopes. 
+This occurs when gradient descent drives up the magnitude of $W_1$ or $W_2$, allowing the 
+network to carve out a razor-sharp boundary rather than a gradual slope.
+
+### Key Insights
+Asymmetric Building Blocks: The network achieves its decision boundary not by using raw rising 
+ramps alone, but by combining inverted, falling contributions. It uses positive $W_2$ neurons to 
+lift the prediction window up at the target's starting edge, and negative $W_2$ neurons with 
+sharp falling slopes to slam the prediction back down once the target character ends.Cooperative 
+
+Cancellation: By balancing positive and negative scaled outputs across the hidden layer, the 
+network constructs a localized "bump" or window function capable of isolating the target 
+character amidst a sea of non-target inputs.
