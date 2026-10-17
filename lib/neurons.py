@@ -10,6 +10,7 @@ def get_y(phase, index, x_range):
     b1 = b1_snapshots[phase][index]
     W2 = W2_snapshots[phase][0][index]
     b2 = b2_snapshots[phase][0]
+    # Apply max(0.0, x) for ReLU activation
     return [max(0.0, (W1 * x) + b1) for x in x_range]
 
 def plot_neuron_curves(hidden_size):
@@ -38,5 +39,5 @@ def plot_neuron_curves(hidden_size):
 
     fig.suptitle("Hidden Neuron Response Curves: Before vs. After Training", fontsize=14)
     plt.tight_layout()
-    plt.savefig("assets/decision2_boundary.png", dpi=300, bbox_inches="tight")
+    #plt.savefig("assets/decision3_boundary.png", dpi=300, bbox_inches="tight")
     plt.show()

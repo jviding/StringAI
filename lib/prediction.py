@@ -61,5 +61,5 @@ def plot_prediction_curve(hidden_size):
 
     fig.suptitle("Neural Network Evolution During Training", fontsize=14)
     plt.tight_layout()
-    plt.savefig("assets/prediction2_boundary.png", dpi=300, bbox_inches="tight")
+    #plt.savefig("assets/prediction3_boundary.png", dpi=300, bbox_inches="tight")
     plt.show()
