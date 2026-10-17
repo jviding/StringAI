@@ -130,3 +130,29 @@ Half-Space vs. Interval Classifiers: Gradient descent settled for a half-space b
 the right side) because it minimized overall loss faster than constructing a fully enclosed 
 interval. True character isolation requires coordinated opposition between rising and falling 
 ramps to pinch the target from both sides.
+
+## Observation: Final Prediction With Mixed Biases
+By replacing strictly positive bias initialization with a mixed distribution spanning both 
+negative and positive values, the network successfully eliminates the unwanted left plateau 
+and forms a localized, bounded peak.
+
+![Neural Network Prediction Boundary](assets/prediction2_boundary.png)
+
+### How Mixed Biases Fix the Plateau
+Negative Bias Neurons (The "Left Walls"): Initializing hidden biases with negative values ensures 
+those neurons start completely flat and inactive at $x = 0.0$. They remain dormant until the 
+input $x$ reaches a specific threshold, at which point they turn on. These act as the missing 
+left boundary.
+
+Positive Bias Neurons (The "Right Walls"): Neurons with positive biases start awake and active 
+at $x = 0.0$, providing the initial height needed to form downward descents when paired with 
+negative output weights.
+
+### Key Insights
+Bounded Interval Classification: By combining neurons that activate from the left with those that 
+shut down on the right, gradient descent has the complete architectural palette required to isolate 
+a specific character slice rather than defaulting to a half-space.
+
+The Power of Initialization: Standard ReLU activations can easily suffer from permanent dead zones 
+if initialized poorly, but a balanced distribution ensures the network retains the structural 
+versatility to carve out precise decision boundaries.
