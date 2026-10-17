@@ -44,3 +44,34 @@ Epoch 60/200 | Average Loss: 0.04195
 String: 'e' | Target: 1.0 | Prediction: 0.9440
 String: 'l' | Target: 0.0 | Prediction: 0.0000
 ```
+
+## Observations: Training
+During training, approximately half of the hidden neurons in the layer flatline and become 
+permanently inactive - a classic manifestation of the **Dying ReLU problem**.
+
+![Neural Network Decision Boundary](assets/decision_boundary.png)
+
+### Why Do Neurons Die?
+1. **Unidirectional Gradient Cuts**: A ReLU activation function evaluates to $f(z) = \max(0, z)$ 
+   with a derivative of $1.0$ for $z > 0$ and $0.0$ for $z \le 0$. If a step during gradient 
+   descent pushes a neuron's weight ($W_1$) or bias ($b_1$) far enough negative that its output 
+   is non-positive across the entire input domain ($x \in [0, 1]$), the gradient drops to 
+   exactly zero. Once zeroed out, backpropagation can no longer pass error signals to those 
+   weights, permanently locking the neuron out of future updates.
+2. **Selective Survival**: Neurons that survive typically start with positive biases or lucky 
+   initial weight alignments, keeping their outputs above zero long enough to receive continuous 
+   gradient updates.
+
+### Key Insights
+* **Automatic Capacity Pruning**: Even though 8 hidden neurons are provided, the network 
+  automatically "prunes" its unused capacity. For a simple 1D decision window, only a few active 
+  rising and falling ramps are required to isolate the target character. The redundant neurons 
+  simply die off rather than contributing noise.
+* **Geometric Asymmetry**: Rising ramps ($W_1 > 0$) survive far more easily than falling ramps 
+  ($W_1 < 0$) because falling ramps start active for all lower-valued inputs ($x = 0$), 
+  accumulating errors across wrong predictions early in training unless carefully counterbalanced.
+
+This behavior highlights a core trade-off when building network architectures from scratch: high 
+capacity offers flexibility, but standard ReLU activations leave excess capacity vulnerable to 
+permanent gradient starvation.
+
