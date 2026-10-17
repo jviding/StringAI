@@ -15,7 +15,7 @@ This project constitutes of:
 - Backward: Rebalances the neurons
 
 Run a full cycle from dataset generation to training to testing:
-> python3 mini.py
+> python3 main.py
 
 
 ## Observations: Dataset
