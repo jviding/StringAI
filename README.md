@@ -136,7 +136,12 @@ By replacing strictly positive bias initialization with a mixed distribution spa
 negative and positive values, the network successfully eliminates the unwanted left plateau 
 and forms a localized, bounded peak.
 
-![Neural Network Prediction Boundary](assets/prediction2_boundary.png)
+![Neural Network Prediction2 Boundary](assets/prediction2_boundary.png)
+
+![Neural Network Output2 Boundary](assets/output2_boundary.png)
+
+![Neural Network Decision2 Boundary](assets/decision2_boundary.png)
+
 
 ### How Mixed Biases Fix the Plateau
 Negative Bias Neurons (The "Left Walls"): Initializing hidden biases with negative values ensures 
