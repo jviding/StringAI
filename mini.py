@@ -3,7 +3,10 @@ from src.network import generate_layer_weights_and_biases
 from src.forward import forward_pass
 from src.backward import backward_pass, compute_loss
 
-from lib.neurons import save_snapshot_of_W1_b1, plot_neuron_curves
+from lib.storage import save_neurons_snapshot
+from lib.neurons import plot_neuron_curves
+from lib.outputs import plot_output_curves
+from lib.prediction import plot_prediction_curve
 
 # ===============================
 # STEP 1: SETUP DATASET & NETWORK
@@ -20,7 +23,7 @@ OUTPUT_SIZE  = 1      # Only 1 final answer (a single probability of whether TAR
 W1, b1, W2, b2 = generate_layer_weights_and_biases(OUTPUT_SIZE, HIDDEN_SIZE, INPUT_SIZE)
 
 # --- Save a copy before training ---
-save_snapshot_of_W1_b1(W1, b1, W2, b2)
+save_neurons_snapshot(W1, b1, W2, b2)
 
 # =========================================
 # STEP 2: TRAINING LOOP (EPOCHS & BACKDROP)
@@ -49,8 +52,15 @@ for epoch in range(EPOCHS):
         avg_loss = total_epoch_loss / DATASET_SIZE
         print(f"Epoch {epoch + 1}/{EPOCHS} | Average Loss: {avg_loss:.5f}")
 
+    # --- Save a copy mid training ---
+    if epoch == (EPOCHS / 4):
+        save_neurons_snapshot(W1, b1, W2, b2)
+
+# --- Save a copy after training ---
+save_neurons_snapshot(W1, b1, W2, b2)
+
 # ====================================
-# STEP 4: EVALUATION & PREDICTION TEST
+# STEP 3: EVALUATION & PREDICTION TEST
 # ====================================
 print("\n--- Testing Network Predictions After Training ---")
 
@@ -63,8 +73,9 @@ for i in range(10):
     
     print(f"String: '{z_strs[i]}' | Target: {target} | Prediction: {prediction:.4f}")
 
-# ================================
-# STEP 5: PLOTTING THE TRANSITIONS
-# ================================
-save_snapshot_of_W1_b1(W1, b1, W2, b2)
+# ========================
+# STEP 4: PLOT PERFORMANCE
+# ========================
 plot_neuron_curves(HIDDEN_SIZE)
+plot_output_curves(HIDDEN_SIZE)
+plot_prediction_curve(HIDDEN_SIZE)
