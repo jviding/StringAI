@@ -1,22 +1,15 @@
-import copy
+from lib.storage import get_neurons_snapshots
 import matplotlib.pyplot as plt
 
-W1_snapshots = []
-b1_snapshots = []
-W2_snapshots = []
-b2_snapshots = []
-
-def save_snapshot_of_W1_b1(W1, b1, W2, b2):
-    W1_snapshots.append(copy.deepcopy(W1))
-    b1_snapshots.append(list(b1))
-    W2_snapshots.append(copy.deepcopy(W2))
-    b2_snapshots.append(list(b2))
 
 def get_y(phase, index, x_range):
+    W1_snapshots, b1_snapshots, W2_snapshots, b2_snapshots = get_neurons_snapshots()
+
     # Calculate neuron output across input range
     W1 = W1_snapshots[phase][index][0]
     b1 = b1_snapshots[phase][index]
     W2 = W2_snapshots[phase][0][index]
+    b2 = b2_snapshots[phase][0]
     return [max(0.0, (W1 * x) + b1) for x in x_range]
 
 def plot_neuron_curves(hidden_size):
@@ -34,7 +27,7 @@ def plot_neuron_curves(hidden_size):
         # Plotting
         ax = axes[i]
         ax.plot(x_range, y_before, color='gray', linestyle='--', label='Before Training')
-        ax.plot(x_range, y_mid, color='black', linestyle='--', label='Mid Training')
+        ax.plot(x_range, y_mid, color='black', linestyle='--', label='25% Trained')
         ax.plot(x_range, y_after, color='dodgerblue', linewidth=2, label='After Training')
         
         ax.set_title(f"Hidden Neuron {i+1}")
