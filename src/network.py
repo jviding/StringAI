@@ -22,7 +22,8 @@ def initialize_hidden_layer_weights_and_biases(hidden_size, input_size):
     
     """Create biases for the hidden neurons."""
     # Biases almost always start at zero, so creates a list of zeros ([0.0. 0.0, ..., 0.0]).
-    b1 = [0.0 for _ in range(hidden_size)]
+    # OBSERVATION: Try mixed biases.
+    b1 = [random.uniform(-1, 1) for _ in range(hidden_size)]
 
     return W1, b1
 
@@ -34,7 +35,8 @@ def initialize_output_layer_weights_and_biases(output_size, hidden_size):
 
     """Create biases for the final output neuron."""
     # These will act as the starting bias.
-    b2 = [0.0 for _ in range(output_size)]
+    # OBSERVATION: Try mixed biases.
+    b2 = [random.uniform(-1, 1) for _ in range(output_size)]
 
     return W2, b2
 
