@@ -1,10 +1,9 @@
 # String AI
-Simple neural network created from a scratch without any libraries. Goal of this project 
-is to learn the mathematical fundamentals of AI. This is to be done via exploration where
-all the parameters are played around with to see how they influence performance and
-predictions down to the per-neuron level.
+Simple neural network created from scratch without any libraries. The goal of this project 
+is to learn the mathematical fundamentals of AI via exploration, playing around with parameters 
+to see how they influence performance and predictions down to the per-neuron level.
 
-The AI engine is stored under *src* and performance metrics under *lib*.
+The AI engine is stored in *src*, performance metrics in *lib*, and graphs in *assets*.
 
 
 ## Project structure
@@ -16,6 +15,56 @@ This project constitutes of:
 
 Run a full cycle from dataset generation to training to testing:
 > python3 main.py
+
+
+## Architecture & Initialization
+Since we are building this from scratch using pure Python, our weights and biases are structured 
+as lists of numbers. The network architecture is designed as follows:
+- Input Layer: Node for each character in our string (currently 1 character = 1 node).
+- Hidden Layer: 8 neurons. Each neuron receives all characters, weighs them, adds a bias, and 
+  passes the result through a ReLU activation function.
+- Output Layer: 1 neuron. It takes the 8 outputs from the hidden layer, weighs them, adds a bias, 
+  and passes the result through a Sigmoid activation function for the final probability (0 to 1).
+
+Parameters
+- $W_1$: First matrix of weights. Every single hidden neuron has its own unique weight vector.
+- $b_1$: Hidden layer biases (initially 0.0, later updated to mixed positive/negative ranges).
+- $W_2$ and $b_2$: Output weights and bias connecting our 8 hidden neurons to our single final 
+  output decision-maker.
+
+## Observations: Dataset
+1. Keeping Features on a Balanced Scale
+Neural networks perform best when all input features live in a uniform, small range (typically 
+between $0.0$ and $1.0$ or $-1.0$ and $1.0$). If one feature has a large raw value and another 
+is small, the optimizer will overcompensate for the larger number, leading to an unstable or 
+biased learning process. For example, feeding raw ASCII integers directly into the network causes 
+the weighted sums ($w \cdot x + b$) to immediately become massive.
+
+2. The Role of Activation Functions
+An activation function is a mathematical gatekeeper sitting at the end of a neuron. After a 
+neuron calculates its weighted sum ($w_1 x_1 + w_2 x_2 + \text{bias}$), it gets a raw, 
+unconstrained number (which could be anything from $-500$ to $+500$). The activation function 
+takes that raw number and decides how much of that signal should be passed on to the next layer.
+
+Think of it like a biological reflex: if incoming sensory signals are weak, the neuron stays 
+silent (outputs $0$). If they cross a threshold, the neuron "fires" and passes a signal forward. 
+Crucially, it introduces non-linearity, allowing the network to learn complex, curved patterns 
+instead of just straight-line math.
+
+3. The S-Curve and Preventing Saturation
+The "S-curve" refers specifically to the shape of the Sigmoid activation function, which looks 
+like a stretched-out letter 'S' lying on its side:
+- The Bottom Flat Part (near 0): If the input number is a large negative (like $-10$), the 
+  function outputs a value very close to $0.0$, turning the neuron off.
+- The Top Flat Part (near 1): If the input number is a large positive (like $+10$), the function 
+  outputs a value very close to $1.0$, fully turning the neuron on.
+- The Steep Middle Slope: For numbers close to $0$ (like $-2$ to $+2$), the curve transitions 
+  smoothly from $0$ up to $1$, squashing any input into a smooth probability.
+
+Why Saturation Matters: If unnormalized, massive numbers are fed into a Sigmoid function, the 
+input pushes the calculation past the slope and straight onto the flat top or bottom edges. In 
+this flat zone, the mathematical derivative drops close to zero. A zero derivative means a zero 
+gradient during backpropagation, causing the network to freeze and completely stop learning.
 
 
 ## Observations: Dataset
@@ -97,9 +146,9 @@ network to carve out a razor-sharp boundary rather than a gradual slope.
 Asymmetric Building Blocks: The network achieves its decision boundary not by using raw rising 
 ramps alone, but by combining inverted, falling contributions. It uses positive $W_2$ neurons to 
 lift the prediction window up at the target's starting edge, and negative $W_2$ neurons with 
-sharp falling slopes to slam the prediction back down once the target character ends.Cooperative 
+sharp falling slopes to slam the prediction back down once the target character ends.
 
-Cancellation: By balancing positive and negative scaled outputs across the hidden layer, the 
+Cooperative Cancellation: By balancing positive and negative scaled outputs across the hidden layer, the 
 network constructs a localized "bump" or window function capable of isolating the target 
 character amidst a sea of non-target inputs.
 
